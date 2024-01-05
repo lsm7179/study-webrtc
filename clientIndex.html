@@ -8,7 +8,11 @@
 <body>
 
 <h1>WebSocket Client</h1>
-<div id="messages"></div>
+<div id="messages">
+    <input id="messageText" type="text"/>
+    <button id="sendButton">send messages</button>
+</div>
+
 
 <script>
     // Create a WebSocket instance
@@ -43,6 +47,20 @@
     function send(message) {
         socket.send(JSON.stringify(message));
     }
+
+    function myTextRender(message) {
+        const messagesContainer = document.getElementById('messages');
+        const messageElement = document.createElement('p');
+        messageElement.textContent = message;
+        messagesContainer.appendChild(messageElement);
+    }
+
+    const sendButton = document.getElementById('sendButton');
+    sendButton.addEventListener('click', () => {
+        const messageComponent = document.getElementById('messageText');
+        send(messageComponent.value);
+        myTextRender('나: '+messageComponent.value);
+    });
 </script>
 
 </body>
