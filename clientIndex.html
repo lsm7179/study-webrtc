@@ -2,23 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script>
-
-        var conn = new WebSocket('ws://localhost:8080/socket');
-
-        function send(message) {
-            conn.send(JSON.stringify(message));
-        }
-
-        configuration = null;
-        var peerConnection = new RTCPeerConnection(configuration);
-
-        var dataChannel = peerConnection.createDataChannel("dataChannel", { reliable: true });
-
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
 </head>
 <body>
+
+<h1>WebSocket Client</h1>
+<div id="messages"></div>
+
+<script>
+    // Create a WebSocket instance
+    const socket = new WebSocket('ws://localhost:8080/socket');
+
+    // Connection opened
+    socket.addEventListener('open', (event) => {
+        console.log('WebSocket connection opened:', event);
+
+        // You can send a message to the server if needed
+        // socket.send('Hello Server!');
+    });
+
+    // Listen for messages from the server
+    socket.addEventListener('message', (event) => {
+        const messagesContainer = document.getElementById('messages');
+        const messageElement = document.createElement('p');
+        messageElement.textContent = event.data;
+        messagesContainer.appendChild(messageElement);
+    });
+
+    // Connection closed
+    socket.addEventListener('close', (event) => {
+        console.log('WebSocket connection closed:', event);
+    });
+
+    // Connection error
+    socket.addEventListener('error', (event) => {
+        console.error('WebSocket error:', event);
+    });
+
+    function send(message) {
+        socket.send(JSON.stringify(message));
+    }
+</script>
 
 </body>
 </html>
